@@ -396,12 +396,13 @@ class Spread:
         col_names = parse_sheet_headers(vals, header_rows)
 
         # remove rows where everything is null, then replace nulls with ''
-        df = (
-            pd.DataFrame(vals[header_rows or 0 :])
-            .replace("", np.nan)
-            .dropna(how="all")
-            .fillna("")
-        )
+        with pd.option_context('future.no_silent_downcasting', True):
+            df = (
+                pd.DataFrame(vals[header_rows or 0 :])
+                .replace("", np.nan)
+                .dropna(how="all")
+                .fillna("")
+            )
 
         # replace values with a different value render option before we set the
         # index in set_col_names
